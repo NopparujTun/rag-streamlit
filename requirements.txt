@@ -1,0 +1,17 @@
+streamlit==1.32.0
+numpy<2
+packaging<24
+langchain==0.1.13
+langchain-community==0.0.29
+langchain-openai==0.1.1
+pinecone-client==3.2.2
+langchain-pinecone==0.1.0
+sentence-transformers
+pypdf==4.1.0
+rank_bm25==0.2.2
+pyyaml==6.0.1
+python-dotenv==1.0.1
+pythainlp
+langchain-google-genai
+PyMuPDF
+pdf2image

@@ -1,0 +1,84 @@
+# =========================
+# Python
+# =========================
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+*.so
+*.egg
+*.egg-info/
+dist/
+build/
+.eggs/
+pip-wheel-metadata/
+
+# Virtual environments
+venv/
+.env/
+.venv/
+
+# =========================
+# Environment Variables
+# =========================
+.env
+.env.*
+!.env.example
+
+# =========================
+# Streamlit
+# =========================
+.streamlit/
+
+# =========================
+# Logs
+# =========================
+logs/
+*.log
+
+# =========================
+# Local Data (RAG-specific)
+# =========================
+local_bm25_data/
+vector_db/
+uploaded_docs/
+
+# =========================
+# Model / Cache
+# =========================
+.cache/
+huggingface/
+*.bin
+*.pt
+*.pth
+
+# =========================
+# OS / Editor
+# =========================
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+
+# =========================
+# Jupyter
+# =========================
+.ipynb_checkpoints/
+
+# =========================
+# Docker
+# =========================
+docker-compose.override.yml
+
+# =========================
+# Testing / Coverage
+# =========================
+.pytest_cache/
+.coverage
+htmlcov/
+
+# =========================
+# Misc
+# =========================
+*.sqlite3
+*.db

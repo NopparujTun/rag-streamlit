@@ -1,0 +1,38 @@
+# Git
+.git
+.gitignore
+
+# Python
+__pycache__
+*.pyc
+*.pyo
+*.egg-info
+.venv
+venv
+env
+
+# IDE
+.vscode
+.idea
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Docker
+Dockerfile
+docker-compose.yml
+.dockerignore
+
+# Env (secrets should be passed at runtime, not baked in)
+.env
+
+# Data (mount as volumes instead)
+local_bm25_data/
+vector_db/
+
+# Misc
+README.md
+tests/

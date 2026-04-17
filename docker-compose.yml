@@ -1,0 +1,16 @@
+services:
+  rag-streamlit:
+    build: .
+    container_name: rag-streamlit
+    ports:
+      - "8501:8501"
+    env_file:
+      - .env
+    environment:
+      - HF_HUB_OFFLINE=1
+    volumes:
+      - ./local_bm25_data:/app/local_bm25_data
+      - ./vector_db:/app/vector_db
+      - ./uploaded_docs:/app/uploaded_docs
+      - ~/.cache/huggingface:/root/.cache/huggingface
+    restart: unless-stopped

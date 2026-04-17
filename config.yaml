@@ -1,0 +1,11 @@
+ingestion:
+  chunk_size: 1000
+  chunk_overlap: 200
+  
+embedding:
+  model_name: "BAAI/bge-m3"
+  device: "cpu"
+
+vector_db:
+  persist_directory: "./local_bm25_data"
+  index_name: "rag-streamlit"
