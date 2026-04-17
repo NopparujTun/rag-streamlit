@@ -128,14 +128,17 @@ def _load_model(model_name: str, device: str):
 
 @st.cache_resource(show_spinner=False)
 def _init_vectorstore():
-    """Connect to the existing vector store if one is persisted."""
-    if os.path.exists(config["vector_db"]["persist_directory"]):
+    """Connect directly to the Cloud Vector Store (Pinecone)."""
+    try:
+        # สั่งโหลดและเชื่อมต่อกับ Pinecone Index ที่มีอยู่แล้วทันที
         return load_hybrid_store(
             embedding_model=embedding_model,
-            persist_dir=config["vector_db"]["persist_directory"],
+            persist_dir=config["vector_db"]["persist_directory"], # เก็บไว้เผื่อใช้ร่วมกับ BM25 local
             index_name=config["vector_db"]["index_name"],
         )
-    return None, None
+    except Exception as e:
+        logger.error(f"Failed to connect to Vector DB: {e}")
+        return None, None
 
 
 with st.spinner("⏳ ยกฐานข้อมูล AI... (กำลังโหลดโมเดล หรือดาวน์โหลดครั้งแรกอาจใช้เวลาสักครู่)"):
