@@ -126,18 +126,12 @@ def evaluate_single_question(
     """Run retrieval → generation → faithfulness & accuracy check for one question."""
     start = time.time()
 
-    retrieved = perform_hybrid_search(
+    answer, retrieved, _ = generate_answer(
         query=item["question"],
         vectorstore=vectorstore,
         bm25_retriever=bm25_retriever,
-        k=SEARCH_TOP_K,
-        reranker=reranker_model,
-    )
-
-    answer, _ = generate_answer(
-        query=item["question"],
-        retrieved_docs=retrieved,
         chat_history="",
+        reranker=reranker_model,
     )
     latency = time.time() - start
 

@@ -4,7 +4,7 @@ Provides functions to initialise, render, and manage the conversational
 interface, including source-document display and evaluation metrics.
 """
 
-from typing import List, Optional
+from typing import Any, List, Optional, Tuple
 
 import streamlit as st
 from langchain_core.documents import Document
@@ -35,6 +35,8 @@ def render_chat_history() -> None:
     """Render all messages in the session-state history to the chat UI."""
     for msg in st.session_state.messages:
         with st.chat_message(msg["role"]):
+            if "steps" in msg and msg["steps"]:
+                display_agent_steps(msg["steps"])
             st.write(msg["content"])
 
 
@@ -52,6 +54,23 @@ def add_user_message(prompt: str) -> None:
 # ---------------------------------------------------------------------------
 # Source display
 # ---------------------------------------------------------------------------
+
+def display_agent_steps(steps: List[Tuple[Any, str]]) -> None:
+    """Render the intermediate reasoning steps of the agent."""
+    if not steps:
+        return
+    with st.expander("🤔 ดูความคิดของ AI (Agent Thinking)", expanded=False):
+        for i, (action, observation) in enumerate(steps):
+            st.markdown(f"**Step {i+1}:** `Tool: {action.tool}`")
+            if hasattr(action, "tool_input"):
+                st.markdown(f"**Query:** `{action.tool_input}`")
+            # handle if observation is long
+            obs_str = str(observation)
+            if len(obs_str) > 200:
+                obs_str = obs_str[:200] + "..."
+            st.caption(f"**Result:** {obs_str}")
+            if i < len(steps) - 1:
+                st.divider()
 
 def display_sources(sources: List[Document]) -> None:
     """Render retrieved source documents in a collapsible expander.

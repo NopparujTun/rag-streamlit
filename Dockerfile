@@ -13,6 +13,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     python3-dev \
     curl \
     poppler-utils \
+    libgl1 \
     && rm -rf /var/lib/apt/lists/*
 
 # install torch cpu first (avoid heavy gpu deps / cache layer)
@@ -23,7 +24,8 @@ RUN pip install --no-cache-dir \
 
 # install python deps (cached unless requirements change)
 COPY requirements.txt .
-RUN pip install --no-cache-dir --default-timeout=1000 -r requirements.txt
+RUN pip install --no-cache-dir -U pip setuptools wheel && \
+    pip install --no-cache-dir --default-timeout=1000 -r requirements.txt
 
 # app source
 COPY . .
