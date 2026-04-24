@@ -134,13 +134,12 @@ rag-streamlit/
 │   ├── __init__.py
 │   ├── ingestion/              # Document ingestion pipeline
 │   │   ├── __init__.py
-│   │   ├── loader.py           #   PDF loading and text cleaning
-│   │   └── chunker.py          #   Thai-aware text chunking with PyThaiNLP
+│   │   ├── ingestion.py        #   PDF loading, text cleaning, and chunking pipeline
+│   │   └── pdf_processor.py    #   Smart PDF processing pipeline
 │   │
 │   ├── rag/                    # Retrieval-Augmented Generation core
 │   │   ├── __init__.py
-│   │   ├── embeddings.py       #   HuggingFace embedding model loader
-│   │   ├── vectorstore.py      #   Pinecone + BM25 hybrid store & RRF search
+│   │   ├── retrieval.py        #   Hybrid store, embeddings, and RRF search
 │   │   ├── generator.py        #   LLM answer generation (OpenTyphoon)
 │   │   └── evaluator.py        #   Faithfulness & accuracy evaluator
 │   │
@@ -317,7 +316,7 @@ pytest tests/ -v
 
 The test suite currently includes:
 
-- **`test_loader.py`** — Validates the document chunking pipeline produces multiple chunks with preserved metadata
+- **`test_ingestion.py`** — Validates the document chunking pipeline produces multiple chunks with preserved metadata
 
 ---
 

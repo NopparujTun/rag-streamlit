@@ -16,7 +16,7 @@ from langchain_core.prompts import ChatPromptTemplate, MessagesPlaceholder
 from langchain_core.tools import tool
 from langchain_openai import ChatOpenAI
 
-from src.rag.vectorstore import HybridRetriever
+from src.rag.retrieval import HybridRetriever
 
 logger = logging.getLogger(__name__)
 

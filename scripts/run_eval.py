@@ -30,10 +30,10 @@ load_dotenv(PROJECT_ROOT / ".env")
 
 import yaml
 
-from src.rag.embeddings import get_embedding_model
+from src.rag.retrieval import get_embedding_model
 from src.rag.evaluator import evaluate_faithfulness, evaluate_accuracy
 from src.rag.generator import generate_answer
-from src.rag.vectorstore import load_hybrid_store, perform_hybrid_search, get_reranker
+from src.rag.retrieval import load_hybrid_store, get_reranker
 
 logging.basicConfig(
     level=logging.INFO,

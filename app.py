@@ -12,11 +12,11 @@ from dotenv import load_dotenv
 # MUST be the first Streamlit command
 st.set_page_config(page_title="Enterprise Smart KB", page_icon="🧠", layout="wide")
 
-from src.ingestion.pipeline import run_ingestion_pipeline
-from src.rag.embeddings import get_embedding_model
+from src.ingestion.ingestion import run_ingestion_pipeline
+from src.rag.retrieval import get_embedding_model
 from src.rag.evaluator import evaluate_faithfulness
 from src.rag.generator import generate_answer
-from src.rag.vectorstore import (
+from src.rag.retrieval import (
     clear_hybrid_store,
     load_hybrid_store,
 )
@@ -55,8 +55,8 @@ def init_session_state():
 @st.cache_resource(show_spinner=False)
 def get_models():
     """Load and cache all heavy models."""
-    from src.rag.vectorstore import get_reranker
-    
+    from src.rag.retrieval import get_reranker
+
     embedding_model = get_embedding_model(
         config["embedding"]["model_name"],
         config["embedding"]["device"],

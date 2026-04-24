@@ -7,7 +7,7 @@ into overlapping chunks while preserving metadata.
 import pytest
 from langchain_core.documents import Document
 
-from src.ingestion.chunker import chunk_documents
+from src.ingestion.ingestion import chunk_documents
 
 
 class TestChunkDocuments:

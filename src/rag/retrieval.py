@@ -1,12 +1,4 @@
-"""Hybrid vector + keyword store with Reciprocal Rank Fusion (RRF) and Re-ranking.
-
-Manages a dual-retrieval system:
-- **Pinecone** for dense vector similarity search (cloud).
-- **BM25Retriever** for sparse keyword search (persisted locally as pickle).
-
-Results are combined using RRF scoring, over-fetched, and optionally 
-re-ranked using a Cross-Encoder for maximum precision.
-"""
+"""Hybrid vector + keyword store with Reciprocal Rank Fusion (RRF) and Re-ranking."""
 
 import concurrent.futures
 import logging
@@ -15,6 +7,7 @@ import pickle
 import shutil
 from typing import Dict, List, Optional, Tuple
 
+from langchain_community.embeddings import HuggingFaceEmbeddings
 from langchain_community.retrievers import BM25Retriever
 from langchain_core.documents import Document
 from langchain_core.embeddings import Embeddings
@@ -26,6 +19,24 @@ logger = logging.getLogger(__name__)
 # RRF smoothing constant (standard value from the original RRF paper).
 DEFAULT_RRF_K = 60
 BM25_FILENAME = "bm25_index.pkl"
+
+
+def get_embedding_model(model_name: str, device: str) -> HuggingFaceEmbeddings:
+    """Load and return a HuggingFace embedding model."""
+    logger.info("Loading embedding model: %s (device=%s)", model_name, device)
+    embeddings = HuggingFaceEmbeddings(
+        model_name=model_name,
+        model_kwargs={"device": device},
+        encode_kwargs={"normalize_embeddings": True},
+    )
+    logger.info("Embedding model loaded successfully")
+    return embeddings
+
+
+def get_reranker(model_name: str = "BAAI/bge-reranker-v2-m3", device: str = "cpu") -> CrossEncoder:
+    """Load a Cross-Encoder model for precision re-ranking."""
+    logger.info("Loading Re-ranker model: %s (device=%s)", model_name, device)
+    return CrossEncoder(model_name, max_length=512, device=device)
 
 
 class HybridRetriever:
@@ -50,7 +61,6 @@ class HybridRetriever:
         fetch_k: int = 8,
     ) -> List[Document]:
         """Perform a hybrid search with optional re-ranking."""
-        
         # 1. Parallel Fetching
         with concurrent.futures.ThreadPoolExecutor(max_workers=2) as executor:
             future_vector = executor.submit(self.vectorstore.similarity_search, query, k=fetch_k)
@@ -170,9 +180,3 @@ def clear_hybrid_store(vectorstore: PineconeVectorStore, persist_dir: str) -> No
         shutil.rmtree(persist_dir)
         os.makedirs(persist_dir, exist_ok=True)
         logger.info("Cleared BM25 index directory: %s", persist_dir)
-
-
-def get_reranker(model_name: str = "BAAI/bge-reranker-v2-m3", device: str = "cpu") -> CrossEncoder:
-    """Load a Cross-Encoder model for precision re-ranking."""
-    logger.info("Loading Re-ranker model: %s (device=%s)", model_name, device)
-    return CrossEncoder(model_name, max_length=512, device=device)
